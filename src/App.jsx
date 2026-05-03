@@ -111,32 +111,40 @@ export default function App() {
   };
 
   const loadFaceDatabase = async () => {
-    const labeledDescriptors = [];
+  const labeledDescriptors = [];
 
-    for (const student of students) {
-      const descriptors = [];
+  const faceMap = {
+    "Yusril iza mahendra": [1, 2, 3],
+    "Ella agustina": [4, 5, 6],
+  };
 
-      for (let i = 1; i <= 3; i++) {
-        try {
-          const img = await faceapi.fetchImage(`/faces/${student.name}/${i}.jpg`);
-          const detection = await faceapi
-            .detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
-            .withFaceLandmarks()
-            .withFaceDescriptor();
+  for (const student of students) {
+    const descriptors = [];
+    const imageNumbers = faceMap[student.name] || [];
 
-          if (detection) descriptors.push(detection.descriptor);
-        } catch (error) {
-          console.log(`Foto tidak ditemukan: /faces/${student.name}/${i}.jpg`);
-        }
-      }
+    for (const num of imageNumbers) {
+      try {
+        const img = await faceapi.fetchImage(`/${num}.jpg`);
+        const detection = await faceapi
+          .detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks()
+          .withFaceDescriptor();
 
-      if (descriptors.length > 0) {
-        labeledDescriptors.push(new faceapi.LabeledFaceDescriptors(student.name, descriptors));
+        if (detection) descriptors.push(detection.descriptor);
+      } catch (error) {
+        console.log(`Foto tidak ditemukan: /${num}.jpg`);
       }
     }
 
-    return labeledDescriptors;
-  };
+    if (descriptors.length > 0) {
+      labeledDescriptors.push(
+        new faceapi.LabeledFaceDescriptors(student.name, descriptors)
+      );
+    }
+  }
+
+  return labeledDescriptors;
+};
 
   const startCamera = async () => {
     if (!modelsReady) {
