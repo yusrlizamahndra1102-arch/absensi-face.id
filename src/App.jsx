@@ -96,7 +96,7 @@ export default function App() {
       const labeledDescriptors = await loadFaceDatabase();
 
       if (labeledDescriptors.length === 0) {
-        setAiMessage("Database wajah kosong. Isi folder public/faces terlebih dahulu.");
+        setAiMessage("Database wajah kosong. Upload 1.jpg sampai 6.jpg terlebih dahulu.");
         return;
       }
 
@@ -106,7 +106,7 @@ export default function App() {
       setAiMessage("AI scanner ready");
     } catch (error) {
       console.error(error);
-      setAiMessage("AI gagal dimuat. Cek folder public/models dan public/faces.");
+      setAiMessage("AI gagal dimuat. Cek folder public/models dan file 1.jpg - 6.jpg.");
     }
   };
 
@@ -453,7 +453,7 @@ export default function App() {
                   <div className="mb-2 flex items-center gap-2 text-green-300"><ShieldCheck size={16} /> SYSTEM LOG</div>
                   <p>&gt; scanner_module: {cameraOn ? "active" : "standby"}</p>
                   <p>&gt; model_status: {modelsReady ? "loaded" : "loading"}</p>
-                  <p>&gt; face_database: public/faces</p>
+                  <p>&gt; face_database: /1.jpg - /6.jpg</p>
                   <p>&gt; face_confidence: {confidence}%</p>
                   <p>&gt; last_message: {aiMessage}</p>
                   <p>&gt; last_sync: {formatTime(now)}</p>
